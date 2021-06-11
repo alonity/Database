@@ -1,0 +1,25 @@
+{
+    "name": "alonity/database",
+    "description": "Alonity database builder",
+    "type": "library",
+    "keywords": ["alonity", "database", "builder", "mysql", "postgresql", "sqlite", "cubrid"],
+    "homepage": "https://qexy.org",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Qexy",
+            "email": "admin@qexy.org",
+            "homepage": "https://qexy.org"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "alonity\\database\\": "src/"
+        }
+    }
+}
