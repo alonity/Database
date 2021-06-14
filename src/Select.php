@@ -40,7 +40,7 @@ class Select extends QueryInheritance {
         return !$driver ? [] : $driver->array();
     }
 
-    public function row(int $type = 1) : array {
+    public function row(int $type = 0) : array {
 
         $driver = $this->getDriver();
 
