@@ -12,7 +12,7 @@
  *
  * @license MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 
@@ -33,6 +33,10 @@ class Against {
 
     private $separator = '';
 
+    private $borderLeft = '';
+
+    private $borderRight = '';
+
     public function __construct($data, string $separator = '', int $mode = 0) {
         $this->data = $data;
 
@@ -47,6 +51,14 @@ class Against {
         $this->mode = $mode;
     }
 
+    public function borders(string $left = null, string $right = '') : self {
+        $this->borderLeft = $left;
+
+        $this->borderRight = $right;
+
+        return $this;
+    }
+
     public function get(DriverInterface $driver) : string {
 
         if(empty($this->data)){ return ''; }
@@ -54,7 +66,7 @@ class Against {
         $format = "";
 
         foreach($this->data as $v){
-            $format .= $this->separator.$v;
+            $format .= $this->separator.$this->borderLeft.$v.$this->borderRight;
         }
 
         switch($this->mode){
