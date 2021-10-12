@@ -12,14 +12,14 @@
  *
  * @license MIT
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  */
 
 namespace alonity\database;
 
 class DB {
-    const VERSION = '1.1.0';
+    const VERSION = '1.1.1';
 
     const ARRAY_ASSOC = 0;
 
@@ -57,8 +57,8 @@ class DB {
         return new In($data);
     }
 
-    public static function Against(string $data) : Against {
-        return new Against($data);
+    public static function Against(string $data, string $separator = '', int $mode = 0) : Against {
+        return new Against($data, $separator, $mode);
     }
 
     public static function Columns(string $name, array $list, ?string $prefix = null, bool $alias = false) : Columns {
