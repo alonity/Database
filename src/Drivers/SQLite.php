@@ -12,7 +12,7 @@
  *
  * @license MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 
@@ -21,6 +21,7 @@ namespace alonity\database\Drivers;
 use alonity\database\Connection;
 use alonity\database\DB;
 use alonity\database\DriverInterface;
+use alonity\database\QueryInheritance;
 use SQLite3, SQLite3Result, Exception, stdClass;
 
 class SQLite implements DriverInterface {
@@ -151,6 +152,49 @@ class SQLite implements DriverInterface {
         }
 
         $this->result = $request;
+
+        return true;
+    }
+
+    /**
+     *
+     * @param QueryInheritance[] $queries
+     *
+     * @param int $flags
+     *
+     * @return bool
+     */
+    public function transaction(array $queries, int $flags = 0) : bool {
+
+        $this->connect();
+
+        if(!$this->connect){ return false; }
+
+        $this->queries[] = "BEGIN;";
+
+        if(!$this->connect->exec("BEGIN;")){
+            $this->setError("SQL Error: {$this->connect->lastErrorMsg()}");
+
+            return false;
+        }
+        foreach($queries as $query){
+            if(!$query->execute()){ break; }
+        }
+
+        $commit = $this->connect->exec("COMMIT;");
+
+        $this->queries[] = "COMMIT;";
+
+        if(!$commit){
+
+            $this->connect->exec("ROLLBACK;");
+
+            $this->queries[] = "ROLLBACK;";
+
+            $this->setError("SQL Error: {$this->connect->lastErrorMsg()}");
+
+            return false;
+        }
 
         return true;
     }

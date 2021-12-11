@@ -12,7 +12,7 @@
  *
  * @license MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 
@@ -21,8 +21,10 @@ namespace alonity\database\Drivers;
 use alonity\database\Connection;
 use alonity\database\DB;
 use alonity\database\DriverInterface;
+use alonity\database\QueryInheritance;
 use mysqli;
 use mysqli_result;
+use mysqli_sql_exception;
 
 class MySQL implements DriverInterface {
 
@@ -150,6 +152,57 @@ class MySQL implements DriverInterface {
         $this->result = $request;
 
         return true;
+    }
+
+    /**
+     *
+     * @param QueryInheritance[] $queries
+     *
+     * @param int $flags
+     *
+     * @return bool
+    */
+    public function transaction(array $queries, int $flags = 0) : bool {
+
+        $this->connect();
+
+        if(!$this->connect){ return false; }
+
+        $result = true;
+
+        $this->connect->autocommit(false);
+
+        $this->queries[] = "SET @@autocommit = 0";
+        $this->queries[] = "START TRANSACTION";
+
+        if(!$this->connect->begin_transaction($flags)){
+            $this->setError("SQL Error: {$this->connect->error}");
+
+            return false;
+        }
+
+        foreach($queries as $query){
+            if(!$query->execute()){
+
+                $result = false;
+
+                break;
+            }
+        }
+
+        if(!$result){
+            $this->queries[] = "ROLLBACK";
+
+            $this->setError("SQL Error: {$this->connect->error}");
+
+            $this->connect->rollback();
+        }else{
+            $this->queries[] = "COMMIT";
+
+            $this->connect->commit();
+        }
+
+        return $result;
     }
 
     public function escape($value) : string {

@@ -91,6 +91,8 @@ class QueryInheritance extends ConnectorInheritance {
 
         $driver = $this->getDriver();
 
+        $driver->getConnection();
+
         if(!$driver){ return false; }
 
         $query = $this->buildQuery();

@@ -12,14 +12,14 @@
  *
  * @license MIT
  *
- * @version 1.1.1
+ * @version 1.2.0
  *
  */
 
 namespace alonity\database;
 
 class DB {
-    const VERSION = '1.1.1';
+    const VERSION = '1.2.0';
 
     const ARRAY_ASSOC = 0;
 
@@ -79,6 +79,17 @@ class DB {
 
     public static function delete(string $query = '', array $prepared = []) : Delete {
         return new Delete($query, $prepared);
+    }
+
+    /**
+     * @param QueryInheritance[] $queries
+     *
+     * @param int $flags
+     *
+     * @return Transaction
+     */
+    public static function Transaction(array $queries = [], int $flags = 0) : Transaction {
+        return new Transaction($queries, $flags);
     }
 }
 

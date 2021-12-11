@@ -12,7 +12,7 @@
  *
  * @license MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 
@@ -35,6 +35,8 @@ interface DriverInterface {
     public function getError() : ?string;
 
     public function query(string $query) : bool;
+
+    public function transaction(array $queries, int $flags = 0) : bool;
 
     public function escape($value) : string;
 

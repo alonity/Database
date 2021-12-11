@@ -12,7 +12,7 @@
  *
  * @license MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 
@@ -21,6 +21,7 @@ namespace alonity\database\Drivers;
 use alonity\database\Connection;
 use alonity\database\DB;
 use alonity\database\DriverInterface;
+use alonity\database\QueryInheritance;
 
 class PostgreSQL implements DriverInterface {
 
@@ -133,6 +134,36 @@ class PostgreSQL implements DriverInterface {
         }
 
         $this->result = $request;
+
+        return true;
+    }
+
+    /**
+     *
+     * @param QueryInheritance[] $queries
+     *
+     * @param int $flags
+     *
+     * @return bool
+     */
+    public function transaction(array $queries, int $flags = 0) : bool {
+
+        $this->connect();
+
+        if(!$this->connect){ return false; }
+
+        if(!$this->query("BEGIN")){
+            return false;
+        }
+
+        foreach($queries as $query){
+            if(!$query->execute()){ break; }
+        }
+
+        if(!$this->query("COMMIT")){
+            $this->query("ROLLBACK");
+            return false;
+        }
 
         return true;
     }
