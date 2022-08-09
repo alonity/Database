@@ -6,13 +6,13 @@
  *
  * @author Qexy admin@qexy.org
  *
- * @copyright © 2021 Alonity
+ * @copyright © 2022 Alonity
  *
  * @package alonity\database
  *
  * @license MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  */
 
@@ -22,7 +22,7 @@ class ConnectorInheritance {
 
     private $error, $connection;
 
-    private $connectionKey = 'default';
+    private $connectionKey;
 
     public function use(string $connectionKey) : self {
         if(!isset(DB::$connections[$connectionKey])){
@@ -55,8 +55,10 @@ class ConnectorInheritance {
             return null;
         }
 
+        $key = $this->connectionKey ?? DB::getConnectionKey();
+
         /** @var $connection Connection */
-        $connection = DB::$connections[$this->connectionKey];
+        $connection = DB::$connections[$key];
 
         $this->connection = $connection;
 

@@ -6,20 +6,20 @@
  *
  * @author Qexy admin@qexy.org
  *
- * @copyright © 2021 Alonity
+ * @copyright © 2022 Alonity
  *
  * @package alonity\database
  *
  * @license MIT
  *
- * @version 1.2.0
+ * @version 1.3.0
  *
  */
 
 namespace alonity\database;
 
 class DB {
-    const VERSION = '1.2.0';
+    const VERSION = '1.3.0';
 
     const ARRAY_ASSOC = 0;
 
@@ -43,10 +43,20 @@ class DB {
 
     public static $connectionsDriversInstances = 0;
 
+    private static $key = 'default';
+
     public static function connection(string $host = '127.0.0.1', string $username = 'root', string $password = '', string $database = '', int $port = 3306, string $charset = 'utf8mb4', string $driver = 'MySQL', string $key = 'default') : Connection {
         self::$connections[$key] = new Connection($host, $username, $password, $database, $port, $charset, $driver, $key);
 
         return self::$connections[$key];
+    }
+
+    public static function use(string $connectionKey) {
+        self::$key = $connectionKey;
+    }
+
+    public static function getConnectionKey() : string {
+        return self::$key;
     }
 
     public static function Like($data) : Like {

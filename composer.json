@@ -4,7 +4,7 @@
     "type": "library",
     "keywords": ["alonity", "database", "builder", "mysql", "postgresql", "sqlite", "cubrid"],
     "homepage": "https://qexy.org",
-    "version": "1.0.0",
+    "version": "1.3.0",
     "license": "MIT",
     "authors": [
         {
@@ -15,7 +15,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.1"
+        "php": "^7.2"
     },
     "autoload": {
         "psr-4": {
